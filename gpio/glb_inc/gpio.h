@@ -26,6 +26,8 @@
 #define GPIO_SPEED_VALUE(speed)			(speed & 0x3U)
 #define GPIO_PUPD_VALUE(pupd)			(pupd & 0x3U)
 #define GPIO_AF_VALUE(af)				(af & 0xFU)
+#define GPIO_INPUT_VALUE(input)			(input & 0x1U)
+#define GPIO_OUPUT_VALUE(output)		(output & 0x1U)
 
 /* GPIO Mode Types */
 #define GPIO_MODE_INPUT					0U
@@ -70,4 +72,7 @@
 
 uint8_t uGPIO_Init(uint8_t nGPIOx);
 uint8_t uGPIO_Config(uint8_t nGPIOPort, uint8_t nGPIONum, GPIO_ConfigType *eConfig);
+uint8_t uGPIO_ReadOutput(uint8_t nGPIOPort, uint8_t nGPIONum, uint8_t *value);
+uint8_t uGPIO_ReadInput(uint8_t nGPIOPort, uint8_t nGPIONum, uint8_t *value);
+uint8_t uGPIO_GetConfig(uint8_t nGPIOPort, uint8_t nGPIONum, GPIO_ConfigType *eConfig);
 #endif /* PRV_INC_GPIO_H_ */

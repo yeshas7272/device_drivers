@@ -26,7 +26,7 @@
 #define GPIOx_OSPEEDR_OFFSET			0x8U
 #define GPIOx_PUPDR_OFFSET				0xCU
 #define GPIOx_IDR_OFFSET				0x10U
-#define GPIOx_0DR_OFFSET				0x14U
+#define GPIOx_ODR_OFFSET				0x14U
 #define GPIOx_BSRR_OFFSET				0x18U
 #define GPIOx_LCKR_OFFSET				0x1CU
 #define GPIOx_AFRL_OFFSET				0x20U
@@ -100,4 +100,7 @@ typedef struct
 
 
 uint8_t GPIO_WriteConfig(uint8_t nGPIOPort, uint8_t nGPIONum, GPIO_ConfigType *eConfig);
+uint8_t GPIO_ReadConfig(uint8_t nGPIOPort, uint8_t nGPIONum, GPIO_ConfigType **eConfig);
+uint8_t GPIO_ReadInput(uint8_t nGPIOPort, uint8_t nGPIONum);
+uint8_t GPIO_ReadOutPut(uint8_t nGPIOPort, uint8_t nGPIONum);
 #endif /* PRV_INC_GPIO_DRV_H_ */

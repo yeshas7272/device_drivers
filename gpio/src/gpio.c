@@ -9,6 +9,65 @@
 
 static GPIO_DriverContext GpioCtx_st;
 
+uint8_t uGPIO_ReadOutput(uint8_t nGPIOPort, uint8_t nGPIONum, uint8_t *value)
+{
+	uint8_t return_value = GPIO_NOT_OK;
+
+	/* Input Validation */
+	if( nGPIOPort < 0 ||
+		nGPIOPort > 4 ||
+		nGPIONum < 0 ||
+		nGPIONum > 15 )
+	{
+		return GPIO_NOT_OK;
+	}
+
+	*value = GPIO_ReadOutPut(nGPIOPort, nGPIONum);
+
+	return return_value;
+}
+
+uint8_t uGPIO_ReadInput(uint8_t nGPIOPort, uint8_t nGPIONum, uint8_t *value)
+{
+	uint8_t return_value = GPIO_NOT_OK;
+
+	/* Input Validation */
+	if( nGPIOPort < 0 ||
+		nGPIOPort > 4 ||
+		nGPIONum < 0 ||
+		nGPIONum > 15 )
+	{
+		return GPIO_NOT_OK;
+	}
+
+	*value = GPIO_ReadInput(nGPIOPort, nGPIONum);
+
+	return return_value;
+}
+
+uint8_t uGPIO_GetConfig(uint8_t nGPIOPort, uint8_t nGPIONum, GPIO_ConfigType *eConfig)
+{
+	GPIO_PortType *pPortData;
+	uint8_t return_value = GPIO_NOT_OK;
+
+	/* Input Validation */
+	if( nGPIOPort < 0 ||
+		nGPIOPort > 4 ||
+		nGPIONum < 0 ||
+		nGPIONum > 15 ||
+		eConfig == NULL_PTR)
+	{
+		return GPIO_NOT_OK;
+	}
+
+	pPortData = &GpioCtx_st.portData[nGPIOPort];
+	if(pPortData->state == GPIO_INIT_DONE)
+	{
+		return_value = GPIO_ReadConfig(nGPIOPort, nGPIONum, &eConfig);
+	}
+
+	return return_value;
+}
 uint8_t uGPIO_Config(uint8_t nGPIOPort, uint8_t nGPIONum, GPIO_ConfigType *eConfig)
 {
 	GPIO_PortType *pPortData;
