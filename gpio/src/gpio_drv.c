@@ -6,7 +6,18 @@
  */
 
 #include "gpio_drv.h"
-#include "gpio.h"
+
+void GPIO_WriteOutPut(uint8_t nGPIOPort, uint8_t nGPIONum, uint8_t value)
+{
+	if(value == 1)
+	{
+		(*(GPIOx_ODR_ADDRESS(nGPIOPort)) |= (value << (GPIOx_0DR_PIN_OFFSET * nGPIONum)));
+	}
+	else
+	{
+		(*(GPIOx_ODR_ADDRESS(nGPIOPort)) &= ~(1 << (GPIOx_0DR_PIN_OFFSET * nGPIONum)));
+	}
+}
 
 uint8_t GPIO_ReadOutPut(uint8_t nGPIOPort, uint8_t nGPIONum)
 {
@@ -72,33 +83,41 @@ uint8_t GPIO_WriteConfig(uint8_t nGPIOPort, uint8_t nGPIONum, GPIO_ConfigType *e
 	alternate_function = GPIO_AF_VALUE(eConfig->af);
 
 	/* Configure Mode */
-	*(GPIOx_MODER_ADDRESS(nGPIOPort)) |= (mode << (GPIOx_MODER_PIN_OFFSET * nGPIONum));
+	(*(GPIOx_MODER_ADDRESS(nGPIOPort))) |= (mode << (GPIOx_MODER_PIN_OFFSET * nGPIONum));
 
-	if(mode == GPIO_MODE_INPUT)
+	if(mode == GPIO_MODE_IN)
 	{
 		/* Configure PUPD */
 		*(GPIOx_PUPDR_ADDRESS(nGPIOPort)) |= (pupd << (GPIOx_PUPDR_PIN_OFFSET * nGPIONum));
+		if(GPIO_INTR_REQ_VALUE(eConfig->intr_required))
+		{
+			return_value = GPIO_WriteIntrConfig(nGPIOPort, nGPIONum, eConfig->intr_config);
+			if(return_value != GPIO_OK)
+			{
+				return return_value;
+			}
+		}
 
 	}
 	else if(mode == GPIO_MODE_OUPUT)
 	{
 		/* Configure Output Type */
-		*(GPIOx_OTYPER_ADDRESS(nGPIOPort)) |= (type << (GPIOx_OTYPER_PIN_OFFSET * nGPIONum));
+		(*(GPIOx_OTYPER_ADDRESS(nGPIOPort))) |= (type << (GPIOx_OTYPER_PIN_OFFSET * nGPIONum));
 
 		/* Configure Output Speed */
-		*(GPIOx_OSPEEDR_ADDRESS(nGPIOPort)) |= (speed << (GPIOx_OSPEEDR_PIN_OFFSET * nGPIONum));
+		(*(GPIOx_OSPEEDR_ADDRESS(nGPIOPort))) |= (speed << (GPIOx_OSPEEDR_PIN_OFFSET * nGPIONum));
 	}
 	else if(mode == GPIO_MODE_AF)
 	{
 		if(nGPIONum > 7)
 		{
 			/* Configure Alternate Function */
-			*(GPIOx_AFRH_ADDRESS(nGPIOPort)) |= (alternate_function << (GPIOx_AFRH_PIN_OFFSET * nGPIONum));
+			(*(GPIOx_AFRH_ADDRESS(nGPIOPort))) |= (alternate_function << (GPIOx_AFRH_PIN_OFFSET * nGPIONum));
 		}
 		else
 		{
 			/* Configure Alternate Function */
-			*(GPIOx_AFRL_ADDRESS(nGPIOPort)) |= (alternate_function << (GPIOx_AFRL_PIN_OFFSET * nGPIONum));
+			(*(GPIOx_AFRL_ADDRESS(nGPIOPort))) |= (alternate_function << (GPIOx_AFRL_PIN_OFFSET * nGPIONum));
 		}
 
 	}
