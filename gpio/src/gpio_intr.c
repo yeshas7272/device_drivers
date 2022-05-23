@@ -12,23 +12,22 @@ volatile static int irqCounter = 0;
 static uint8_t GPIO_IntrGetPort(uint8_t pin)
 {
 	int port = 0xFFU;
-	int i = 0;
-	if(pin < 4)
+	if(pin < GPIO_PIN_NUM_4)
 	{
 		port = (((*GPIO_SYSCFG_EXTICR1_REG_ADDR) >>
 				(pin % GPIO_SYSCFG_EXTICR_REG_PIN_OFFSET) * GPIO_SYSCFG_EXTICR_REG_PIN_OFFSET) & 0xF);
 	}
-	else if(pin >= 4 && pin < 8)
+	else if(pin >= GPIO_PIN_NUM_4  && pin < GPIO_PIN_NUM_8)
 	{
 		port = (((*GPIO_SYSCFG_EXTICR2_REG_ADDR) >>
 						(pin % GPIO_SYSCFG_EXTICR_REG_PIN_OFFSET) * GPIO_SYSCFG_EXTICR_REG_PIN_OFFSET) & 0xF);
 	}
-	else if(pin >= 8 && pin < 12)
+	else if(pin >= GPIO_PIN_NUM_8 && pin < GPIO_PIN_NUM_12)
 	{
 		port = (((*GPIO_SYSCFG_EXTICR3_REG_ADDR) >>
 						(pin % GPIO_SYSCFG_EXTICR_REG_PIN_OFFSET) * GPIO_SYSCFG_EXTICR_REG_PIN_OFFSET) & 0xF);
 	}
-	else if(pin >= 12 && pin < 15)
+	else if(pin >= GPIO_PIN_NUM_12 && pin < GPIO_PIN_NUM_15)
 	{
 		port = (((*GPIO_SYSCFG_EXTICR3_REG_ADDR) >>
 						(pin % GPIO_SYSCFG_EXTICR_REG_PIN_OFFSET) * GPIO_SYSCFG_EXTICR_REG_PIN_OFFSET) & 0xF);
@@ -42,55 +41,61 @@ static uint8_t GPIO_IntrGetPort(uint8_t pin)
 
 void GPIO_IntrHandlerEXTI0()
 {
-	int i = 0;
 	int port = 0;
 	/* Find Interrupt port */
-	port = GPIO_IntrGetPort(0);
+	port = GPIO_IntrGetPort(GPIO_PIN_NUM_0);
 	/* Find the callback notification */
+	GPIO_IntrCallback(port, GPIO_PIN_NUM_0);
 
 	/* Clear Interrupt */
+	*EXTI_PENDING_REG_ADDR |= (1 << GPIO_PIN_NUM_0);
 }
 
 void GPIO_IntrHandlerEXTI1()
 {
-	int i = 0;
-	uint32_t value = 0;
+	int port = 0;
 	/* Find Interrupt port */
-	value = ((*GPIO_SYSCFG_EXTICR1_REG_ADDR) >>
-			(1 % GPIO_SYSCFG_EXTICR_REG_PIN_OFFSET) * GPIO_SYSCFG_EXTICR_REG_PIN_OFFSET);
+	port = GPIO_IntrGetPort(GPIO_PIN_NUM_1);
 	/* Find the callback notification */
+	GPIO_IntrCallback(port, GPIO_PIN_NUM_1);
 
 	/* Clear Interrupt */
+	*EXTI_PENDING_REG_ADDR |= (1 << GPIO_PIN_NUM_1);
 }
 
 void GPIO_IntrHandlerEXTI2()
 {
-	int i = 0;
-
-	/* Find Interrupt pin */
+	int port = 0;
+	/* Find Interrupt port */
+	port = GPIO_IntrGetPort(GPIO_PIN_NUM_2);
 	/* Find the callback notification */
+	GPIO_IntrCallback(port, GPIO_PIN_NUM_2);
 
 	/* Clear Interrupt */
+	*EXTI_PENDING_REG_ADDR |= (1 << GPIO_PIN_NUM_2);
 }
 
 void GPIO_IntrHandlerEXTI3()
 {
-	int i = 0;
-
-	/* Find Interrupt pin */
+	int port = 0;
+	/* Find Interrupt port */
+	port = GPIO_IntrGetPort(GPIO_PIN_NUM_3);
 	/* Find the callback notification */
+	GPIO_IntrCallback(port, GPIO_PIN_NUM_3);
 
 	/* Clear Interrupt */
+	*EXTI_PENDING_REG_ADDR |= (1 << GPIO_PIN_NUM_3);
 }
 
 void GPIO_IntrHandlerEXTI4()
 {
-	int i = 0;
-
-	/* Find Interrupt pin */
+	int port = 0;
+	/* Find Interrupt port */
+	port = GPIO_IntrGetPort(GPIO_PIN_NUM_4);
 	/* Find the callback notification */
-
+	GPIO_IntrCallback(port, GPIO_PIN_NUM_4);
 	/* Clear Interrupt */
+	*EXTI_PENDING_REG_ADDR |= (1 << GPIO_PIN_NUM_4);
 }
 
 void GPIO_IntrHandlerEXTI9_5()
@@ -98,7 +103,7 @@ void GPIO_IntrHandlerEXTI9_5()
 	int i = 0;
 	int port = 0;
 
-	for( i = 5; i <= 9; i++)
+	for( i = GPIO_PIN_NUM_5; i <= GPIO_PIN_NUM_9; i++)
 	{
 		if(((*EXTI_PENDING_REG_ADDR) & i) >> i)
 		{
@@ -114,6 +119,8 @@ void GPIO_IntrHandlerEXTI9_5()
 
 	/* Find the callback notification */
 	GPIO_IntrCallback(port, i);
+	/* Clear Interrupt */
+	*EXTI_PENDING_REG_ADDR |= (1 << i);
 }
 void GPIO_IntrHandlerEXTI10_15()
 {
@@ -121,7 +128,7 @@ void GPIO_IntrHandlerEXTI10_15()
 	int port = 0;
 	uint32_t exti_pending_reg = *EXTI_PENDING_REG_ADDR;
 	/* Find Interrupt pin */
-	for( i = 10; i <= 15; i++)
+	for( i = GPIO_PIN_NUM_10; i <= GPIO_PIN_NUM_15; i++)
 	{
 		if(((exti_pending_reg >> i) & 1) == 1)
 		{
@@ -189,10 +196,10 @@ static void GPIO_IntrAdditional(uint8_t nGPIOPort, uint8_t nGPIONum)
 uint8_t GPIO_WriteIntrConfig(uint8_t nGPIOPort, uint8_t nGPIONum, GPIO_IntrConfig *intr_config)
 {
 	uint8_t return_value = GPIO_NOT_OK;
-	if( nGPIOPort < 0 ||
-		nGPIOPort > 4 ||
-		nGPIONum < 0 ||
-		nGPIONum > 15 ||
+	if( nGPIOPort < UGPIOA ||
+		nGPIOPort > UGPIOE ||
+		nGPIONum < GPIO_PIN_NUM_0 ||
+		nGPIONum > GPIO_PIN_NUM_15 ||
 		intr_config->intr_cbk == NULL_PTR)
 	{
 		return GPIO_NOT_OK;

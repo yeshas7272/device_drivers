@@ -6,7 +6,7 @@
  */
 
 #include "gpio_drv.h"
-
+#include "gpio_intr.h"
 void GPIO_WriteOutPut(uint8_t nGPIOPort, uint8_t nGPIONum, uint8_t value)
 {
 	if(value == 1)
@@ -91,7 +91,7 @@ uint8_t GPIO_WriteConfig(uint8_t nGPIOPort, uint8_t nGPIONum, GPIO_ConfigType *e
 		*(GPIOx_PUPDR_ADDRESS(nGPIOPort)) |= (pupd << (GPIOx_PUPDR_PIN_OFFSET * nGPIONum));
 		if(GPIO_INTR_REQ_VALUE(eConfig->intr_required))
 		{
-			return_value = GPIO_WriteIntrConfig(nGPIOPort, nGPIONum, eConfig->intr_config);
+			return_value = GPIO_WriteIntrConfig(nGPIOPort, nGPIONum, &eConfig->intr_config);
 			if(return_value != GPIO_OK)
 			{
 				return return_value;

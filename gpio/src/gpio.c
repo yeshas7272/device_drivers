@@ -24,10 +24,10 @@ static void addToLUT(uint8_t nGPIONum, GPIO_PortType **portData)
 }
 static uint8_t GPIO_ValidateInput(uint8_t nGPIOPort, uint8_t nGPIONum)
 {
-	if( nGPIOPort < 0 ||
-		nGPIOPort > 4 ||
-		nGPIONum < 0 ||
-		nGPIONum > 15 )
+	if( nGPIOPort < UGPIOA ||
+		nGPIOPort > UGPIOE ||
+		nGPIONum < GPIO_PIN_NUM_0 ||
+		nGPIONum > GPIO_PIN_NUM_15 )
 	{
 		return GPIO_NOT_OK;
 	}

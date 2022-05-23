@@ -70,6 +70,24 @@
 #define GPIO_AF_14						14U
 #define GPIO_AF_15						15U
 
+/* GPIO NUM */
+#define GPIO_PIN_NUM_0					0U
+#define GPIO_PIN_NUM_1					1U
+#define GPIO_PIN_NUM_2					2U
+#define GPIO_PIN_NUM_3					3U
+#define GPIO_PIN_NUM_4					4U
+#define GPIO_PIN_NUM_5					5U
+#define GPIO_PIN_NUM_6					6U
+#define GPIO_PIN_NUM_7					7U
+#define GPIO_PIN_NUM_8					8U
+#define GPIO_PIN_NUM_9					9U
+#define GPIO_PIN_NUM_10					10U
+#define GPIO_PIN_NUM_11					11U
+#define GPIO_PIN_NUM_12					12U
+#define GPIO_PIN_NUM_13					13U
+#define GPIO_PIN_NUM_14					14U
+#define GPIO_PIN_NUM_15					15U
+
 
 typedef void (*GPIO_IntrCbk)();
 typedef enum
