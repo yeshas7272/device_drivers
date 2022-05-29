@@ -69,7 +69,27 @@ static uint32_t I2C_GetSystemClkFrequency()
 
 	return system_clock_freq;
 }
-void I2C_ConfigureSCL(uint8_t i2c_peripheral, I2C_ConfigType *config )
+
+static void I2CDrv_GenerateStartCondition(I2C_RegDefType *i2c_peripheral_regs)
+{
+	i2c_peripheral_regs->I2C_CR1 |= (1 << I2C_CR1_START_BIT_POS);
+}
+
+uint8_t I2CDrv_MasterSend(I2C_RegDefType *i2c_peripheral_regs, uint8_t *buffer, uint32_t len, uint8_t slave_address)
+{
+	uint8_t return_value = I2C_NOT_OK;
+
+	/* generate start condition */
+	I2CDrv_GenerateStartCondition(i2c_peripheral_regs);
+
+	/* wait for start condition generation*/
+	while(!(i2c_peripheral_regs->I2C_SR1 & (1 << I2C_SR1_START_BIT_POS)));
+
+
+
+}
+
+void I2CDrv_ConfigureSCL(I2C_RegDefType *i2c_peripheral_regs, I2C_ConfigType *config )
 {
 	uint32_t system_clock_freq = 0;
 	uint16_t ahb_prescalar = 0;
@@ -90,13 +110,13 @@ void I2C_ConfigureSCL(uint8_t i2c_peripheral, I2C_ConfigType *config )
 
 	i2c_cr2_freq = peripheral_clk / 1000000U;
 
-	(I2Cx_CR2_REG(i2c_peripheral)) |= (i2c_cr2_freq & 0x3FU);
+	i2c_peripheral_regs->I2C_CR2 |= (i2c_cr2_freq & 0x3FU);
 
 	if(config->scl_speed <= I2C_SCL_SPEED_SM)
 	{
 		/* Standard Mode Config */
 		ccr = peripheral_clk / (2 * I2C_SCL_SPEED_SM);
-		(I2Cx_CCR_REG(i2c_peripheral)) |= ccr;
+		i2c_peripheral_regs->I2C_CCR |= ccr;
 	}
 	else
 	{
@@ -117,7 +137,7 @@ void I2C_ConfigureSCL(uint8_t i2c_peripheral, I2C_ConfigType *config )
 		}
 
 		reg |= (ccr & 0xFFFU);
-		(I2Cx_CCR_REG(i2c_peripheral)) |= reg;
+		i2c_peripheral_regs->I2C_CCR |= reg;
 
 	}
 }

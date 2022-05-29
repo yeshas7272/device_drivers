@@ -14,7 +14,7 @@
 #define BIT_ENABLE											1U
 #define BIT_DISABLE											0U
 
-/*typedef struct
+typedef struct
 {
 	uint32_t I2C_CR1;
 	uint32_t I2C_CR2;
@@ -27,7 +27,7 @@
 	uint32_t I2C_TRISE;
 	uint32_t I2C_FLTR;
 
-}I2C_RegDefType; */
+}I2C_RegDefType;
 
 /* I2C PClk Enable MACROS */
 #define	I2C_RCC_CFGR										(*(volatile uint32_t *)0x40023808U)
@@ -55,9 +55,11 @@
 #define I2C2_BASE_ADDRESS									(0x40005800U)
 #define I2C3_BASE_ADDRESS									(0x40005C00U)
 
-/*#define I2C1_REGS											((volatile I2C_RegDefType *) I2C1_BASE_ADDRESS)
-#define I2C2_REGS											((volatile I2C_RegDefType *) I2C2_BASE_ADDRESS)
-#define I2C3_REGS											((volatile I2C_RegDefType *) I2C3_BASE_ADDRESS)*/
+#define I2C1_REGS											(( I2C_RegDefType *) I2C1_BASE_ADDRESS)
+#define I2C2_REGS											(( I2C_RegDefType *) I2C2_BASE_ADDRESS)
+#define I2C3_REGS											(( I2C_RegDefType *) I2C3_BASE_ADDRESS)
+#define I2Cx_BASE_ADDRESS(i2c)								(i2c == I2C1_NUM ? I2C1_REGS : \
+															(i2c == I2C2_NUM ? I2C2_REGS : I2C3_REGS))
 
 #define I2C_CR1_OFFSET										0x0U
 #define I2C_CR2_OFFSET										0x4U
@@ -145,6 +147,7 @@
 #define RCC_SCLK_SWITCH_STATUS_HSI							0U
 #define RCC_SCLK_SWITCH_STATUS_HSE							1U
 #define RCC_SCLK_SWITCH_STATUS_PLL							2U
+
 typedef uint32_t i2c_mutex;
 
 typedef enum
@@ -155,14 +158,17 @@ typedef enum
 
 typedef struct
 {
+	I2C_RegDefType *i2c_peripheral_regs;
 	I2C_ConfigType config;
 	I2C_PeripheralStateType state;
 }I2C_PeripheralType;
+
 typedef struct
 {
 	I2C_PeripheralType i2c_peripheral[MAX_I2C_SUPPORTED];
 	i2c_mutex mutex;
 }I2C_DriverContextType;
 
-void I2C_ConfigureSCL(uint8_t i2c_peripheral, I2C_ConfigType *config );
+void I2CDrv_ConfigureSCL(I2C_RegDefType *i2c_peripheral_regs, I2C_ConfigType *config );
+uint8_t I2CDrv_MasterSend(I2C_RegDefType *i2c_peripheral_regs, uint8_t *buffer, uint32_t len, uint8_t slave_address);
 #endif /* PRVINC_I2C_DRV_H_ */
