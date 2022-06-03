@@ -170,5 +170,5 @@ typedef struct
 }I2C_DriverContextType;
 
 void I2CDrv_ConfigureSCL(I2C_RegDefType *i2c_peripheral_regs, I2C_ConfigType *config );
-uint8_t I2CDrv_MasterSend(I2C_RegDefType *i2c_peripheral_regs, uint8_t *buffer, uint32_t len, uint8_t slave_address);
+void I2CDrv_MasterSend(I2C_RegDefType *i2c_peripheral_regs, uint8_t *buffer, uint32_t len, uint8_t slave_address);
 #endif /* PRVINC_I2C_DRV_H_ */

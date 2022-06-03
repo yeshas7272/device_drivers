@@ -70,23 +70,60 @@ static uint32_t I2C_GetSystemClkFrequency()
 	return system_clock_freq;
 }
 
-static void I2CDrv_GenerateStartCondition(I2C_RegDefType *i2c_peripheral_regs)
+static inline void I2CDrv_GenerateStopCondition(I2C_RegDefType *i2c_peripheral_regs)
+{
+	while(! ((i2c_peripheral_regs->I2C_SR1 & (1 << I2C_SR1_TXE_BIT_POS)) && (i2c_peripheral_regs->I2C_SR1 & (1 << I2C_SR1_BTF_BIT_POS))) );
+	i2c_peripheral_regs->I2C_CR1 |= (1 << I2C_CR1_STOP_BIT_POS);
+}
+
+static inline void I2CDrv_GenerateStartCondition(I2C_RegDefType *i2c_peripheral_regs)
 {
 	i2c_peripheral_regs->I2C_CR1 |= (1 << I2C_CR1_START_BIT_POS);
 }
 
-uint8_t I2CDrv_MasterSend(I2C_RegDefType *i2c_peripheral_regs, uint8_t *buffer, uint32_t len, uint8_t slave_address)
+static inline void I2CDrv_SendAddress(I2C_RegDefType *i2c_peripheral_regs, uint8_t slave_address)
 {
-	uint8_t return_value = I2C_NOT_OK;
+	/* Slave address is 7 bit long and are stored in bits 1 to 8 of data register*/
+	i2c_peripheral_regs->I2C_DR = (((slave_address & 0xFF) << 1) & (~1));
+}
 
-	/* generate start condition */
+static inline void I2CDrv_ClearADDR(I2C_RegDefType *i2c_peripheral_regs)
+{
+	uint32_t sr1 = i2c_peripheral_regs->I2C_SR1;
+	uint32_t sr2 = i2c_peripheral_regs->I2C_SR2;
+
+	(void)sr1;
+	(void)sr2;
+}
+
+void I2CDrv_MasterSend(I2C_RegDefType *i2c_peripheral_regs, uint8_t *buffer, uint32_t len, uint8_t slave_address)
+{
+
+	/* generate start condition indicated by SB = 0.
+	 * while SB = 1 SCL will be stretched */
 	I2CDrv_GenerateStartCondition(i2c_peripheral_regs);
 
 	/* wait for start condition generation*/
 	while(!(i2c_peripheral_regs->I2C_SR1 & (1 << I2C_SR1_START_BIT_POS)));
 
+	/* Send Address of the destination */
+	I2CDrv_SendAddress(i2c_peripheral_regs, slave_address);
 
+	/* Clear ADDR flag by reading SR1 and SR2, untill it is clear SCL will be stretched */
+	I2CDrv_ClearADDR(i2c_peripheral_regs);
 
+	/* Send all data, if TXE = 1*/
+	while(len > 0)
+	{
+		while(! (i2c_peripheral_regs->I2C_SR1 & (1 << I2C_SR1_TXE_BIT_POS) ));
+		i2c_peripheral_regs->I2C_DR = *buffer;
+		buffer++;
+		len--;
+	}
+
+	/* Generate Stop condition if TXE = 1 and BTF = 1 */
+
+	I2CDrv_GenerateStopCondition(i2c_peripheral_regs);
 }
 
 void I2CDrv_ConfigureSCL(I2C_RegDefType *i2c_peripheral_regs, I2C_ConfigType *config )
@@ -95,6 +132,7 @@ void I2CDrv_ConfigureSCL(I2C_RegDefType *i2c_peripheral_regs, I2C_ConfigType *co
 	uint16_t ahb_prescalar = 0;
 	uint8_t apb1_prescalar = 0;
 	uint32_t peripheral_clk = 0;
+	uint8_t trise = 0;
 	uint8_t i2c_cr2_freq = 0;
 	uint16_t ccr = 0;
 	uint32_t reg = 0;
@@ -140,4 +178,8 @@ void I2CDrv_ConfigureSCL(I2C_RegDefType *i2c_peripheral_regs, I2C_ConfigType *co
 		i2c_peripheral_regs->I2C_CCR |= reg;
 
 	}
+
+	/* Configure TRISE */
+	trise = i2c_cr2_freq + 1;
+	i2c_peripheral_regs->I2C_TRISE = (trise & 0x3FU);
 }

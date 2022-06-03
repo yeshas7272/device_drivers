@@ -38,7 +38,9 @@ uint8_t I2C_MasterSend(uint8_t i2c_peripheral, uint8_t *buffer, uint32_t len, ui
 	}
 
 	i2c_peripheral_regs = I2C_DriverContext.i2c_peripheral[i2c_peripheral].i2c_peripheral_regs;
-	return_value = I2CDrv_MasterSend(i2c_peripheral_regs, buffer, len, slave_address);
+	I2CDrv_MasterSend(i2c_peripheral_regs, buffer, len, slave_address);
+
+	return_value = I2C_OK;
 
 	return return_value;
 
