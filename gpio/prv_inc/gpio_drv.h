@@ -10,6 +10,7 @@
 
 #include <stdint.h>
 #include "gpio.h"
+
 /* Port A to E*/
 #define GPIO_NUM_OF_PORTS				0x5U
 /* GPIO 0-15*/
@@ -62,7 +63,7 @@
 #define GPIOx_AFRL_ADDRESS(gpio)		((volatile uint32_t *)(GPIOx_BASE_ADDRESS(gpio) + GPIOx_AFRL_OFFSET))
 #define GPIOx_AFRH_ADDRESS(gpio)		((volatile uint32_t *)(GPIOx_BASE_ADDRESS(gpio) + GPIOx_AFRH_OFFSET))
 
-
+typedef uint32_t gpio_mutex;
 typedef enum
 {
 	GPIO_NO_INIT=0,
@@ -85,6 +86,7 @@ typedef struct
 typedef struct
 {
 	GPIO_PortType portData[GPIO_NUM_OF_PORTS];
+	gpio_mutex mutex;
 }GPIO_DriverContext;
 
 
@@ -93,4 +95,7 @@ uint8_t GPIO_ReadConfig(uint8_t nGPIOPort, uint8_t nGPIONum, GPIO_ConfigType **e
 uint8_t GPIO_ReadInput(uint8_t nGPIOPort, uint8_t nGPIONum);
 uint8_t GPIO_ReadOutPut(uint8_t nGPIOPort, uint8_t nGPIONum);
 void GPIO_WriteOutPut(uint8_t nGPIOPort, uint8_t nGPIONum, uint8_t value);
+void mutex_init(void * mutex);
+extern void unlock_mutex(void * mutex);
+extern void lock_mutex(void * mutex);
 #endif /* PRV_INC_GPIO_DRV_H_ */

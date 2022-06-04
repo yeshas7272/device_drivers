@@ -7,6 +7,16 @@
 
 #include "gpio_drv.h"
 #include "gpio_intr.h"
+
+/**
+ * @brief Private function to write output of a gpio pin
+ *
+ * @pre
+ * @post
+ * @param nGPIOPort
+ * @param nGPIONum
+ * @param value
+ */
 void GPIO_WriteOutPut(uint8_t nGPIOPort, uint8_t nGPIONum, uint8_t value)
 {
 	if(value == 1)
@@ -19,6 +29,15 @@ void GPIO_WriteOutPut(uint8_t nGPIOPort, uint8_t nGPIONum, uint8_t value)
 	}
 }
 
+/**
+ * @brief Private function to read a gpio output
+ *
+ * @pre
+ * @post
+ * @param nGPIOPort
+ * @param nGPIONum
+ * @return
+ */
 uint8_t GPIO_ReadOutPut(uint8_t nGPIOPort, uint8_t nGPIONum)
 {
 	uint8_t input = 0;
@@ -27,6 +46,15 @@ uint8_t GPIO_ReadOutPut(uint8_t nGPIOPort, uint8_t nGPIONum)
 	return GPIO_OUPUT_VALUE(input);
 }
 
+/**
+ * @brief Private function to read a gpio input
+ *
+ * @pre
+ * @post
+ * @param nGPIOPort
+ * @param nGPIONum
+ * @return
+ */
 uint8_t GPIO_ReadInput(uint8_t nGPIOPort, uint8_t nGPIONum)
 {
 	uint8_t input = 0;
@@ -35,6 +63,16 @@ uint8_t GPIO_ReadInput(uint8_t nGPIOPort, uint8_t nGPIONum)
 	return GPIO_INPUT_VALUE(input);
 }
 
+/**
+ * @brief Private function to read a gpio config
+ *
+ * @pre
+ * @post
+ * @param nGPIOPort
+ * @param nGPIONum
+ * @param eConfig
+ * @return
+ */
 uint8_t GPIO_ReadConfig(uint8_t nGPIOPort, uint8_t nGPIONum, GPIO_ConfigType **eConfig)
 {
 	uint8_t return_value = GPIO_OK;
@@ -67,6 +105,17 @@ uint8_t GPIO_ReadConfig(uint8_t nGPIOPort, uint8_t nGPIONum, GPIO_ConfigType **e
 	return return_value;
 
 }
+
+/**
+ * @brief Private function to configure a gpio
+ *
+ * @pre
+ * @post
+ * @param nGPIOPort
+ * @param nGPIONum
+ * @param eConfig
+ * @return
+ */
 uint8_t GPIO_WriteConfig(uint8_t nGPIOPort, uint8_t nGPIONum, GPIO_ConfigType *eConfig)
 {
 	uint8_t return_value = GPIO_OK;

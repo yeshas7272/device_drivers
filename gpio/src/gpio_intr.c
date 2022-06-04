@@ -9,6 +9,14 @@
 
 volatile static int irqCounter = 0;
 
+/**
+ * @brief This function finds the port of the pin on which an interrupt is triggered
+ *
+ * @pre
+ * @post
+ * @param pin
+ * @return
+ */
 static uint8_t GPIO_IntrGetPort(uint8_t pin)
 {
 	int port = 0xFFU;
@@ -148,7 +156,14 @@ void GPIO_IntrHandlerEXTI10_15()
 	*EXTI_PENDING_REG_ADDR |= (1 << i);
 }
 
-/* Additional config register outside of GPIO driver */
+/**
+ * @brief This function performs necessary NVIC and SYSCFG configuration for a gpio interrupt
+ *
+ * @pre
+ * @post
+ * @param nGPIOPort
+ * @param nGPIONum
+ */
 static void GPIO_IntrAdditional(uint8_t nGPIOPort, uint8_t nGPIONum)
 {
 	uint8_t temp = 0;
@@ -193,6 +208,16 @@ static void GPIO_IntrAdditional(uint8_t nGPIOPort, uint8_t nGPIONum)
 	}
 }
 
+/**
+ * @brief This function configures a gpio interrupt
+ *
+ * @pre
+ * @post
+ * @param nGPIOPort
+ * @param nGPIONum
+ * @param intr_config
+ * @return
+ */
 uint8_t GPIO_WriteIntrConfig(uint8_t nGPIOPort, uint8_t nGPIONum, GPIO_IntrConfig *intr_config)
 {
 	uint8_t return_value = GPIO_NOT_OK;

@@ -7,7 +7,7 @@
 
 #ifndef GLB_INC_GPIO_H_
 #define GLB_INC_GPIO_H_
-
+#include <stdint.h>
 /* GPIO Driver support Port A-E, Unused Port H*/
 #define UGPIOA							0U
 #define UGPIOB							1U
@@ -88,6 +88,7 @@
 #define GPIO_PIN_NUM_14					14U
 #define GPIO_PIN_NUM_15					15U
 
+#define GPIO_DEFAULT					0xFFU
 
 typedef void (*GPIO_IntrCbk)();
 typedef enum

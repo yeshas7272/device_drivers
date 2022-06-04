@@ -6,9 +6,16 @@
  */
 #include "gpio_drv.h"
 #include "gpio.h"
-
 static GPIO_DriverContext GpioCtx_st;
 
+/**
+ * @brief Adds a gpio pin config to LUT
+ *
+ * @pre
+ * @post
+ * @param nGPIONum
+ * @param portData
+ */
 static void addToLUT(uint8_t nGPIONum, GPIO_PortType **portData)
 {
 	GPIO_PortType *pPortData = *portData;
@@ -22,6 +29,16 @@ static void addToLUT(uint8_t nGPIONum, GPIO_PortType **portData)
 		}
 	}
 }
+
+/**
+ * @brief Private function to validate input data
+ *
+ * @pre
+ * @post
+ * @param nGPIOPort
+ * @param nGPIONum
+ * @return
+ */
 static uint8_t GPIO_ValidateInput(uint8_t nGPIOPort, uint8_t nGPIONum)
 {
 	if( nGPIOPort < UGPIOA ||
@@ -35,6 +52,14 @@ static uint8_t GPIO_ValidateInput(uint8_t nGPIOPort, uint8_t nGPIONum)
 	return GPIO_OK;
 }
 
+/**
+ * @brief This function handles the EXTI interrupt on all gpios
+ *
+ * @pre
+ * @post
+ * @param nGPIOPort
+ * @param nGPIONum
+ */
 void GPIO_IntrCallback(uint8_t nGPIOPort, uint8_t nGPIONum)
 {
 	GPIO_PortType *pPortData = &GpioCtx_st.portData[nGPIOPort];
@@ -45,6 +70,16 @@ void GPIO_IntrCallback(uint8_t nGPIOPort, uint8_t nGPIONum)
 	}
 }
 
+/**
+ * @brief This function writes the output value of a gpio
+ *
+ * @pre
+ * @post
+ * @param nGPIOPort
+ * @param nGPIONum
+ * @param value
+ * @return
+ */
 uint8_t uGPIO_WriteOutput(uint8_t nGPIOPort, uint8_t nGPIONum, uint8_t value)
 {
 	uint8_t return_value = GPIO_OK;
@@ -60,6 +95,16 @@ uint8_t uGPIO_WriteOutput(uint8_t nGPIOPort, uint8_t nGPIONum, uint8_t value)
 	return return_value;
 }
 
+/**
+ * @brief This function read the output value of a gpio pin
+ *
+ * @pre
+ * @post
+ * @param nGPIOPort
+ * @param nGPIONum
+ * @param value
+ * @return
+ */
 uint8_t uGPIO_ReadOutput(uint8_t nGPIOPort, uint8_t nGPIONum, uint8_t *value)
 {
 	uint8_t return_value = GPIO_NOT_OK;
@@ -75,6 +120,16 @@ uint8_t uGPIO_ReadOutput(uint8_t nGPIOPort, uint8_t nGPIONum, uint8_t *value)
 	return return_value;
 }
 
+/**
+ * @brief This functions return the input value of a gpio pin
+ *
+ * @pre
+ * @post
+ * @param nGPIOPort
+ * @param nGPIONum
+ * @param value
+ * @return
+ */
 uint8_t uGPIO_ReadInput(uint8_t nGPIOPort, uint8_t nGPIONum, uint8_t *value)
 {
 	uint8_t return_value = GPIO_NOT_OK;
@@ -90,6 +145,16 @@ uint8_t uGPIO_ReadInput(uint8_t nGPIOPort, uint8_t nGPIONum, uint8_t *value)
 	return return_value;
 }
 
+/**
+ * @brief This function reads the config of a gpio pin
+ *
+ * @pre
+ * @post
+ * @param nGPIOPort
+ * @param nGPIONum
+ * @param eConfig
+ * @return
+ */
 uint8_t uGPIO_GetConfig(uint8_t nGPIOPort, uint8_t nGPIONum, GPIO_ConfigType *eConfig)
 {
 	GPIO_PortType *pPortData;
@@ -109,6 +174,17 @@ uint8_t uGPIO_GetConfig(uint8_t nGPIOPort, uint8_t nGPIONum, GPIO_ConfigType *eC
 
 	return return_value;
 }
+
+/**
+ * @brief Configures a gpio port and pin
+ *
+ * @pre
+ * @post
+ * @param nGPIOPort
+ * @param nGPIONum
+ * @param eConfig
+ * @return
+ */
 uint8_t uGPIO_Config(uint8_t nGPIOPort, uint8_t nGPIONum, GPIO_ConfigType *eConfig)
 {
 	GPIO_PortType *pPortData;
@@ -141,6 +217,14 @@ uint8_t uGPIO_Config(uint8_t nGPIOPort, uint8_t nGPIONum, GPIO_ConfigType *eConf
 	return return_value;
 }
 
+/**
+ * @brief Init function for gpio driver
+ *
+ * @pre
+ * @post
+ * @param nGPIOx
+ * @return
+ */
 uint8_t uGPIO_Init(uint8_t nGPIOx)
 {
 	GPIO_PortType *pPortData;
