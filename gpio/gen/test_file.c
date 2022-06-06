@@ -10,23 +10,159 @@
 #include "gpio_gen.h"
 #include "gpio_drv.h"
 
-const GPIO_IODataType GPIO_Cfg[GEN_GPIO_NUM_CONFIGURED] =
+const GPIO_PbCfgType GPIO_Cfg[GEN_GPIO_NUM_CONFIGURED] =
 {
-	{
         
-                    10,				    /* GPIO Number */ 
-                    {                                         
-                            11,			/* GPIO Mode */   
-                            12,			/* GPIO Output Type */
-                            13,			/* GPIO Speed Type */
-                            14,			/* GPIO PUPD Type */
-                            15,			/* GPIO Alternate Function*/
-                            16,			/* GPIO Interrupt Required */
-                            {
-                                17,
-                                18
-                            },
-                    }
+    {
+        UGPIOA,									/* GPIO Port */
+				{
+						3,				    /* GPIO Number */
+						{
+								0,			/* GPIO Mode */
+								1,			/* GPIO Output Type */
+								3,			/* GPIO Speed Type */
+								0,			/* GPIO PUPD Type */
+								0,			/* GPIO Alternate Function*/
+								1,			/* GPIO Interrupt Required */
+								{
+									0,
+									intr_cbk
+								},
+						}
+				}
+    },
             
-    }
+    {
+        UGPIOA,									/* GPIO Port */
+				{
+						13,				    /* GPIO Number */
+						{
+								0,			/* GPIO Mode */
+								1,			/* GPIO Output Type */
+								3,			/* GPIO Speed Type */
+								0,			/* GPIO PUPD Type */
+								0,			/* GPIO Alternate Function*/
+								1,			/* GPIO Interrupt Required */
+								{
+									0,
+									intr_cbk
+								},
+						}
+				}
+    },
+            
+    {
+        UGPIOA,									/* GPIO Port */
+				{
+						2,				    /* GPIO Number */
+						{
+								0,			/* GPIO Mode */
+								1,			/* GPIO Output Type */
+								3,			/* GPIO Speed Type */
+								0,			/* GPIO PUPD Type */
+								0,			/* GPIO Alternate Function*/
+								1,			/* GPIO Interrupt Required */
+								{
+									0,
+									intr_cbk
+								},
+						}
+				}
+    },
+            
+    {
+        UGPIOA,									/* GPIO Port */
+				{
+						5,				    /* GPIO Number */
+						{
+								0,			/* GPIO Mode */
+								1,			/* GPIO Output Type */
+								3,			/* GPIO Speed Type */
+								0,			/* GPIO PUPD Type */
+								0,			/* GPIO Alternate Function*/
+								1,			/* GPIO Interrupt Required */
+								{
+									0,
+									intr_cbk
+								},
+						}
+				}
+    },
+            
+    {
+        UGPIOB,									/* GPIO Port */
+				{
+						3,				    /* GPIO Number */
+						{
+								0,			/* GPIO Mode */
+								1,			/* GPIO Output Type */
+								3,			/* GPIO Speed Type */
+								0,			/* GPIO PUPD Type */
+								0,			/* GPIO Alternate Function*/
+								1,			/* GPIO Interrupt Required */
+								{
+									0,
+									intr_cbk
+								},
+						}
+				}
+    },
+            
+    {
+        UGPIOB,									/* GPIO Port */
+				{
+						13,				    /* GPIO Number */
+						{
+								0,			/* GPIO Mode */
+								1,			/* GPIO Output Type */
+								3,			/* GPIO Speed Type */
+								0,			/* GPIO PUPD Type */
+								0,			/* GPIO Alternate Function*/
+								1,			/* GPIO Interrupt Required */
+								{
+									0,
+									intr_cbk
+								},
+						}
+				}
+    },
+            
+    {
+        UGPIOB,									/* GPIO Port */
+				{
+						2,				    /* GPIO Number */
+						{
+								0,			/* GPIO Mode */
+								1,			/* GPIO Output Type */
+								3,			/* GPIO Speed Type */
+								0,			/* GPIO PUPD Type */
+								0,			/* GPIO Alternate Function*/
+								1,			/* GPIO Interrupt Required */
+								{
+									0,
+									intr_cbk
+								},
+						}
+				}
+    },
+            
+    {
+        UGPIOB,									/* GPIO Port */
+				{
+						5,				    /* GPIO Number */
+						{
+								0,			/* GPIO Mode */
+								1,			/* GPIO Output Type */
+								3,			/* GPIO Speed Type */
+								0,			/* GPIO PUPD Type */
+								0,			/* GPIO Alternate Function*/
+								1,			/* GPIO Interrupt Required */
+								{
+									0,
+									intr_cbk
+								},
+						}
+				}
+    },
+            
 };

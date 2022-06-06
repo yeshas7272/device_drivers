@@ -4,32 +4,32 @@
 			"A":
 					[
 						{
-							"pin":3, "mode" : 0, "otype": 1, "speed": 3, "intr": true, "cbk": "intr_cbk"
+							"pin":3, "mode" : 0, "otype": 1, "speed": 3, "pupd": 0, "af": 0, "intr": true, "intr_trigger": 0, "cbk": "intr_cbk"
 						},           
 						{            
-							"pin":13, "mode" : 0, "otype": 1, "speed": 3, "intr": true, "cbk": "intr_cbk"
+							"pin":13, "mode" : 0, "otype": 1, "speed": 3, "pupd": 0, "af": 0, "intr": true, "intr_trigger": 0, "cbk": "intr_cbk"
 						},           
 						{            
-							"pin":2, "mode" : 0, "otype": 1, "speed": 3, "intr": true, "cbk": "intr_cbk"
+							"pin":2, "mode" : 0, "otype": 1, "speed": 3, "pupd": 0, "af": 0, "intr": true, "intr_trigger": 0, "cbk": "intr_cbk"
 						},           
 						{            
-							"pin":5, "mode" : 0, "otype": 1, "speed": 3, "intr": true, "cbk": "intr_cbk"
+							"pin":5, "mode" : 0, "otype": 1, "speed": 3, "pupd": 0, "af": 0, "intr": true, "intr_trigger": 0, "cbk": "intr_cbk"
 						}
 					],
 			
 			"B":
 					[
 						{
-							"pin":3, "mode" : 0, "otype": 1, "speed": 3, "intr": true, "cbk": "intr_cbk"
+							"pin":3, "mode" : 0, "otype": 1, "speed": 3, "pupd": 0, "af": 0, "intr": true, "intr_trigger": 0, "cbk": "intr_cbk"
 						},           
 						{            
-							"pin":13, "mode" : 0, "otype": 1, "speed": 3, "intr": true, "cbk": "intr_cbk"
+							"pin":13, "mode" : 0, "otype": 1, "speed": 3, "pupd": 0, "af": 0, "intr": true, "intr_trigger": 0, "cbk": "intr_cbk"
 						},           
 						{            
-							"pin":2, "mode" : 0, "otype": 1, "speed": 3, "intr": true, "cbk": "intr_cbk"
+							"pin":2, "mode" : 0, "otype": 1, "speed": 3, "pupd": 0, "af": 0, "intr": true, "intr_trigger": 0, "cbk": "intr_cbk"
 						},           
 						{            
-							"pin":5, "mode" : 0, "otype": 1, "speed": 3, "intr": true, "cbk": "intr_cbk"
+							"pin":5, "mode" : 0, "otype": 1, "speed": 3, "pupd": 0, "af": 0, "intr": true, "intr_trigger": 0, "cbk": "intr_cbk"
 						}
 					]
 											
